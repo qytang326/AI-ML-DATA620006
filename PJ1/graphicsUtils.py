@@ -168,7 +168,7 @@ def end_graphics():
             if _root_window != None:
                 _root_window.destroy()
         except SystemExit as e:
-            print('Ending graphics raised an exception:', e)
+            print(('Ending graphics raised an exception:', e))
     finally:
         _root_window = None
         _canvas = None
