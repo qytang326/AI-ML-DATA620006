@@ -46,11 +46,13 @@ def construct_MDP(A_POS, A_TO_POS, A_REWARD, B_POS, B_TO_POS, B_REWARD):
 
             if [i, j] == A_POS:
                 next['L'] = next['R'] = next['D'] = next['U'] = A_TO_POS
-                reward['L'] = reward['R'] = reward['D'] = reward['U'] = A_REWARD
+                reward['L'] = reward['R'] = reward['D'] = reward[
+                    'U'] = A_REWARD
 
             if [i, j] == B_POS:
                 next['L'] = next['R'] = next['D'] = next['U'] = B_TO_POS
-                reward['L'] = reward['R'] = reward['D'] = reward['U'] = B_REWARD
+                reward['L'] = reward['R'] = reward['D'] = reward[
+                    'U'] = B_REWARD
 
             nextState[i].append(next)
             actionReward[i].append(reward)
@@ -69,14 +71,15 @@ def value_iteration(nextState, actionReward):
                 values = []
                 for action in actions:
                     newPosition = nextState[i][j][action]
-                    values.append(actionReward[i][j][action] + discount * world[newPosition[0]][newPosition[1]])
+                    values.append(actionReward[i][j][action] + discount *
+                                  world[newPosition[0]][newPosition[1]])
                 new_v = max(values)
-                difference += abs(world[i][j]-new_v)
+                difference += abs(world[i][j] - new_v)
                 world[i][j] = new_v
         if difference < 1e-4:
             print('Value Iteration')
             for j in range(WORLD_SIZE):
-                print([round(each_v, 1)for each_v in world[j]])
+                print([round(each_v, 1) for each_v in world[j]])
             break
 
 
@@ -88,7 +91,7 @@ def policy_evaluation(world, policy, nextState, actionReward):
                 action = actions[policy[i][j]]
                 newPosition = nextState[i][j][action]
                 new_v = actionReward[i][j][action] + discount * world[newPosition[0]][newPosition[1]]
-                difference += abs(world[i][j]-new_v)
+                difference += abs(world[i][j] - new_v)
                 world[i][j] = new_v
         if difference < 1e-4:
             break
@@ -99,7 +102,9 @@ def policy_evaluation(world, policy, nextState, actionReward):
 def policy_iteration(nextState, actionReward):
     # random initialize state value and policy
     world = [[0 for _ in range(WORLD_SIZE)] for _ in range(WORLD_SIZE)]
-    policy = [[random.randint(0, len(actions)-1) for _ in range(WORLD_SIZE)] for _ in range(WORLD_SIZE)]
+    policy = [[random.randint(0,
+                              len(actions) - 1) for _ in range(WORLD_SIZE)]
+              for _ in range(WORLD_SIZE)]
     while True:
         world = policy_evaluation(world, policy, nextState, actionReward)
         unchanged = True
@@ -111,7 +116,8 @@ def policy_iteration(nextState, actionReward):
                 values = []
                 for action in actions:
                     newPosition = nextState[i][j][action]
-                    values.append(actionReward[i][j][action] + discount * world[newPosition[0]][newPosition[1]])
+                    values.append(actionReward[i][j][action] + discount *
+                                  world[newPosition[0]][newPosition[1]])
                 if max(values) > policy_value:
                     max_index = 0
                     for k in range(1, len(values)):
@@ -139,12 +145,12 @@ while True:
         B_list = input().strip().split()
         A_POS, A_TO_POS, A_REWARD = process_read(A_list)
         B_POS, B_TO_POS, B_REWARD = process_read(B_list)
-        nextState, actionReward = construct_MDP(A_POS, A_TO_POS, A_REWARD, B_POS, B_TO_POS, B_REWARD)
+        nextState, actionReward = construct_MDP(A_POS, A_TO_POS, A_REWARD,
+                                                B_POS, B_TO_POS, B_REWARD)
         value_iteration(nextState, actionReward)
         policy_iteration(nextState, actionReward)
     except EOFError:
         break
-
 
 # Try to solve Grid World problem based on MDP.
 # The grid world is of 5*5 size. The cells of the grid correspond to
@@ -161,4 +167,3 @@ while True:
 #input:
 # [0,1] [4,1] 10.0
 # [0,3] [2,3] 5.0
-

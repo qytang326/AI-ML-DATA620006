@@ -1,4 +1,4 @@
- # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 # __author__ = 'siyuan'
 import random
 WORLD_SIZE = 5
@@ -46,16 +46,19 @@ def construct_MDP(A_POS, A_TO_POS, A_REWARD, B_POS, B_TO_POS, B_REWARD):
 
             if [i, j] == A_POS:
                 next['L'] = next['R'] = next['D'] = next['U'] = A_TO_POS
-                reward['L'] = reward['R'] = reward['D'] = reward['U'] = A_REWARD
+                reward['L'] = reward['R'] = reward['D'] = reward[
+                    'U'] = A_REWARD
 
             if [i, j] == B_POS:
                 next['L'] = next['R'] = next['D'] = next['U'] = B_TO_POS
-                reward['L'] = reward['R'] = reward['D'] = reward['U'] = B_REWARD
+                reward['L'] = reward['R'] = reward['D'] = reward[
+                    'U'] = B_REWARD
 
             nextState[i].append(next)
             actionReward[i].append(reward)
             # print(nextState[0],actionReward[0][0])
     return nextState, actionReward
+
 
 # value iteration
 def value_iteration(nextState, actionReward):
@@ -68,17 +71,18 @@ def value_iteration(nextState, actionReward):
             for j in range(WORLD_SIZE):
                 for action in actions:
                     newPos = nextState[i][j][action]
-                    new_v = max(actionReward[i][j][action] + discount * world[newPos[0]][newPos[1]],0)
-                    difference = max(difference,abs(world[i][j]-new_v))
-                world[i][j]=new_v
+                    new_v = max(actionReward[i][j][action] +
+                                discount * world[newPos[0]][newPos[1]], 0)
+                    difference = max(difference, abs(world[i][j] - new_v))
+                world[i][j] = new_v
                 #difference=max(difference,delta)
         ## End your code
-                
+
         # keep iteration until convergence
         if difference < 1e-1:
             print('Value Iteration')
             for j in range(WORLD_SIZE):
-                print([round(each_v, 1)for each_v in world[j]])
+                print([round(each_v, 1) for each_v in world[j]])
             break
 
 
@@ -86,9 +90,9 @@ def policy_evaluation(world, policy, nextState, actionReward):
     while True:
         difference = 0
         # Begin your code
-                
+
         ## End your code
-                
+
         if difference < 1e-4:
             break
     return world
@@ -98,10 +102,12 @@ def policy_evaluation(world, policy, nextState, actionReward):
 def policy_iteration(nextState, actionReward):
     # random initialize state value and policy
     world = [[0 for _ in range(WORLD_SIZE)] for _ in range(WORLD_SIZE)]
-    policy = [[random.randint(0, len(actions)-1) for _ in range(WORLD_SIZE)] for _ in range(WORLD_SIZE)]
+    policy = [[random.randint(0,
+                              len(actions) - 1) for _ in range(WORLD_SIZE)]
+              for _ in range(WORLD_SIZE)]
     while True:
         ## Begin your code
-                
+
         ## End your code
         pass
     print('Policy Iteration')
@@ -122,11 +128,9 @@ while True:
         B_list = input().strip().split()
         A_POS, A_TO_POS, A_REWARD = process_read(A_list)
         B_POS, B_TO_POS, B_REWARD = process_read(B_list)
-        nextState, actionReward = construct_MDP(A_POS, A_TO_POS, A_REWARD, B_POS, B_TO_POS, B_REWARD)
+        nextState, actionReward = construct_MDP(A_POS, A_TO_POS, A_REWARD,
+                                                B_POS, B_TO_POS, B_REWARD)
         value_iteration(nextState, actionReward)
         policy_iteration(nextState, actionReward)
     except EOFError:
         break
-
-
-
