@@ -1,0 +1,39 @@
+# Project: pbrain-17210190007
+# Makefile created by Dev-C++ 5.11
+
+CPP      = g++.exe
+CC       = gcc.exe
+WINDRES  = windres.exe
+RES      = Gomocup_private.res
+OBJ      = example.o myAI.o pisqpipe.o $(RES)
+LINKOBJ  = example.o myAI.o pisqpipe.o $(RES)
+LIBS     = -L"D:/Soft/Dev-Cpp/MinGW64/lib32" -L"D:/Soft/Dev-Cpp/MinGW64/x86_64-w64-mingw32/lib32" -static-libgcc -m32
+INCS     = -I"D:/Soft/Dev-Cpp/MinGW64/include" -I"D:/Soft/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"D:/Soft/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include"
+CXXINCS  = -I"D:/Soft/Dev-Cpp/MinGW64/include" -I"D:/Soft/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"D:/Soft/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include" -I"D:/Soft/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include/c++"
+BIN      = pbrain-17210190007.exe
+CXXFLAGS = $(CXXINCS) -m32
+CFLAGS   = $(INCS) -m32
+RM       = rm.exe -f
+
+.PHONY: all all-before all-after clean clean-custom
+
+all: all-before $(BIN) all-after
+
+clean: clean-custom
+	${RM} $(OBJ) $(BIN)
+
+$(BIN): $(OBJ)
+	$(CPP) $(LINKOBJ) -o $(BIN) $(LIBS)
+
+example.o: example.cpp
+	$(CPP) -c example.cpp -o example.o $(CXXFLAGS)
+
+myAI.o: myAI.cpp
+	$(CPP) -c myAI.cpp -o myAI.o $(CXXFLAGS)
+
+pisqpipe.o: pisqpipe.cpp
+	$(CPP) -c pisqpipe.cpp -o pisqpipe.o $(CXXFLAGS)
+
+Gomocup_private.res: Gomocup_private.rc 
+	$(WINDRES) -i Gomocup_private.rc -F pe-i386 --input-format=rc -o Gomocup_private.res -O coff 
+
